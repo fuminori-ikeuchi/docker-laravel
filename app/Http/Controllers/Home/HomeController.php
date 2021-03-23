@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Home;   //このファイルはどの階層にあ
 use App\Http\Controllers\Controller;
 // use App\Stock; 最初に書かれていた(useは何を使うか)
 use Illuminate\Http\Request;
-use app\Models\Stock;
+use App\Models\Stock;
 
 class HomeController extends Controller
 {
@@ -17,8 +17,8 @@ class HomeController extends Controller
     public function index()
     {
         $data = [
-            // 'stock'      => Stock::getBypk(2)
-            "stock"         => "welcome!"
+            // 'stock'      => "ああああああああ"
+            "stock"         => Stock::getStocks()
         ];
 
         return view('stock.index', $data);
