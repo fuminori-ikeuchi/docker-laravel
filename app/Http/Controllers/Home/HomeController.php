@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Stock;   //このファイルはどの階層にあるか
+namespace App\Http\Controllers\Home;   //このファイルはどの階層にあるか
 
 use App\Http\Controllers\Controller;
 // use App\Stock; 最初に書かれていた(useは何を使うか)
 use Illuminate\Http\Request;
 use app\Models\Stock;
 
-class StockController extends Controller
+class HomeController extends Controller
 {
     /**
      * Display a listing of the resource.
