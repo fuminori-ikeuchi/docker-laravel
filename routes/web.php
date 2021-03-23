@@ -15,8 +15,10 @@
 //     return view('welcome');
 // });
 
-Route::group(["namespace" => "Stock"], function(){
-    Route::get('/', 'StockController@index');
+Route::group(["namespace" => "Home"], function(){
+    Route::get('/', 'HomeController@index');
+
+    // Route::get('/', 'StockController@index');
     // Route::get('stock/{id}', 'StockController@show');
     // Route::get('stock/new', 'StockController@new');
     // Route::post('stock', 'StockController@create');
