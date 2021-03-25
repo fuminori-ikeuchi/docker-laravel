@@ -17,11 +17,14 @@
 
 Route::group(["namespace" => "Home"], function(){
     Route::get('/', 'HomeController@index');
+    Route::get('/register', 'HomeController@register');
+    Route::post('/register', 'HomeController@create');
+    Route::get('/check/{id}', 'HomeController@check');
+    
+
 
     // Route::get('/', 'StockController@index');
     // Route::get('stock/{id}', 'StockController@show');
-    // Route::get('stock/new', 'StockController@new');
-    // Route::post('stock', 'StockController@create');
     // Route::get('stock/{id}/edit', 'StockController@edit');
     // Route::put('stock/{id}', 'StockController@update');
     // Route::delete('stock/{id}', 'StockController@destroy');
