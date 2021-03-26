@@ -16,11 +16,20 @@
 // });
 
 Route::group(["namespace" => "Home"], function(){
+    //在庫
     Route::get('/', 'HomeController@index');
     Route::get('/register', 'HomeController@register');
     Route::post('/register', 'HomeController@create');
     Route::get('/check/{id}', 'HomeController@check');
     
+    
+    //発注
+    Route::get('/order', 'HomeController@o_index');
+    Route::get('/o_register', 'HomeController@o_register');
+    Route::post('/o_register', 'HomeController@o_create');
+    Route::get('/status/{id}', 'HomeController@status');
+    Route::post('/status', 'HomeController@change_status');     // {id}なくても大丈夫
+
 
 
     // Route::get('/', 'StockController@index');

@@ -23,8 +23,8 @@
                 </div>
             </div>
             <div>
-　　　　<a href="/">戻る</a>
-　　 </div>
+　　　　        <a href="/">戻る</a>
+            </div>
         </div>
     </div>
 </div>
