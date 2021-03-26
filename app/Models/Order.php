@@ -45,4 +45,10 @@ class Order extends Model
         
     }
 
+    
+    public static function check($o_id)
+    {
+        return self::firstwhere('id', $o_id);
+    }
+
 }

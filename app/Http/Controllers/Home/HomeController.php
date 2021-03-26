@@ -161,6 +161,21 @@ class HomeController extends Controller
             'status'     =>      $request->input('status', null),
         ];
         Order::change_status($o_id, $update);
+
+
+        $checker = Order::check($o_id);
+        // Log::debug(print_r($checker, true));   //個数取れる
+        
+        if ($checker['status'] == '発注受取済み') {
+            $getName = Stock::getChecker($checker->name);
+            // Log::debug(print_r($getName, true));      //stockテーブルの情報取得
+            Log::debug($getName->name);
+            $update = [
+                'num'     =>      $checker["o_num"] + $getName["num"]
+            ];
+            Stock::totalNum($getName->id, $update);     // idをモデルに
+        }
+        // Log::debug($o_id);
         return redirect('/order');
     }
 

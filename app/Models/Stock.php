@@ -39,4 +39,16 @@ class Stock extends Model
         // return self::select('name', $record)->get(); // self::create...自らのテーブルから受け取ったidを取得しreturnする
         return self::firstwhere('name', $name);
     }
+
+    
+    public static function getChecker($checker)
+    {
+        return self::firstwhere('name', $checker);
+    }
+
+    
+    public static function totalNum($getName, $update)
+    {
+        self::where('id', $getName)->update($update);
+    }
 }
