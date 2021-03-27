@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Stock extends Model
+{
+    /**
+     * モデルと関連しているテーブル
+     *
+     * @var string
+     */
+    protected $table = 'stocks';  // stocksテーブルを使う
+    protected $fillable = ['name', 'price'];  // 新規登録でnameとpriceカラムに入れるのを許可
+
+    public function orders() // 複数形
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public static function getStocks()
+    {
+        return self::all();     // コントローラでgetStocks()を呼び出して、returenで取得した値をコントローラに返している
+    }
+
+    public static function registerStock($create)
+    {
+        self::create($create);  // self::create...自らのテーブルに保存
+    }
+
+    public static function getCheck($s_id)
+    {
+        return self::find($s_id);  // self::create...自らのテーブルから受け取ったidを取得しreturnする
+    }
+    
+    public static function recordCheck($name)
+    {
+        // return self::select('name', $record)->get(); // self::create...自らのテーブルから受け取ったidを取得しreturnする
+        return self::firstwhere('name', $name);
+    }
+
+    
+    public static function getChecker($checker)
+    {
+        return self::firstwhere('name', $checker);
+    }
+
+    
+    public static function totalNum($getName, $update)
+    {
+        self::where('id', $getName)->update($update);
+    }
+}
