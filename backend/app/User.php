@@ -6,6 +6,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use Illuminate\Support\Facades\Hash;     // ハッシュ使う 登録時に文字化けさせている
+use App\Models\Base as ModelBase;
+use Illuminate\Database\Eloquent\Collection;
+use Log;
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -15,8 +20,8 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password',
+    protected $fillable = [                                    // 新規で登録する場合、$fillable（許可）設定
+        'name', 'email', 'password', 'role'
     ];
 
     /**
@@ -36,4 +41,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function hasEmail($email)
+    {
+        return self::firstWhere("email", $email);                  // このemailがあるかどうか（重複防止）
+        // return $data !== null ? true : false;
+    }
+
+    public static function createUser($name, $email, $password, $role)
+    {
+        $create = [
+            "name" => $name,
+            "email" => $email,
+            "password" => Hash::make($password),   // 注意
+            "role" => $role,
+        ];
+        
+        // Log::debug(print_r($create, true));
+        self::create($create);                               // 登録後
+    }
 }
