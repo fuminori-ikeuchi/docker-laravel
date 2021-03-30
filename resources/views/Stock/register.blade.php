@@ -17,45 +17,38 @@
                         在庫登録
                     </div>
                     <div class="card-body">
-
-
-
-                    <form class="form" method="POST" action="/register" enctype="multipart/form-data">
-                        @csrf
-
-                    <div class="form mb-4">
-                        <div class="col-md-6">
-                            <label for="lastName">商品名</label>
-                            <input type="text" class="form-control" name="name" placeholder="商品名" required>
-                            <div class="invalid-feedback">
-                                入力してください
+                        <form class="form" method="POST" action="/register" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form mb-4">
+                                <div class="col-md-6">
+                                    <label for="lastName">商品名</label>
+                                    <input type="text" class="form-control" name="name" placeholder="商品名" required>
+                                    <div class="invalid-feedback">
+                                        入力してください
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mt-3">
+                                    <label for="firstName">金額 (単価)</label>
+                                    <input type="text" class="form-control" name="price" placeholder="金額 (数字入力)" required>
+                                    <div class="invalid-feedback">
+                                        入力してください
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 mt-3">
-                            <label for="firstName">金額 (単価)</label>
-                            <input type="text" class="form-control" name="price" placeholder="金額 (数字入力)" required>
-                            <div class="invalid-feedback">
-                                入力してください
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <button type="submit" class="btn btn-primary">登録</button>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-            <div class="col-sm-6">
-                <button type="submit" class="btn btn-primary">登録</button>
-            </div>
-        </div>
- </form>
-
-
-
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div>
-　　　　<a href="/">戻る</a>
-　　 </div>
+    　　<a href="/">戻る</a>
+    </div>
 </div>
 
 

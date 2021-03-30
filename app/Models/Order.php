@@ -16,7 +16,7 @@ class Order extends Model
 
     public function stock() // 単数形
     {
-        return $this->belongsTo(Stock::class);
+        return $this->belongsTo(Stock::class);     // stockモデルに紐付け（１）
     }
 
     // public function user() // 単数形
@@ -26,27 +26,27 @@ class Order extends Model
 
     public static function getOrders()
     {
-        return self::all();     // コントローラでgetStocks()を呼び出して、returenで取得した値をコントローラに返している
+        return self::all();     // コントローラでgetStocks()を呼び出して、returenで取得した値（レコード）をコントローラに返している
     }
 
-    public static function registerOrder($create)
+    public static function registerOrder($create)    // 穴あきで"名前"と"発注個数"を登録し、returnで返す
     {
         return self::create($create);
     }
 
-    public static function updateOrder($record, $update)
+    public static function updateOrder($record, $update)   // 先ほど保存したレコードをid検索し、ヒットしたところにupdateかける
     {
-        self::where('id', $record)->update($update);      // where('id', $record)の'id'はカラム、おぶじぇくと(配列か)
+        self::where('name', $record)->update($update);      // where('id', $record)の'id'はカラム、おぶじぇくと(配列か)
     }
 
     public static function getStatus($o_id)
     {
-        return self::find($o_id);  // self::create...自らのテーブルから受け取ったidを取得しreturnする
+        return self::find($o_id);  // self::find...自らのテーブルから受け取ったidを取得しreturnする
     }
     
     public static function change_status($o_id, $update)
     {
-        self::where('id', $o_id)->update($update);
+        self::where('id', $o_id)->update($update);     // idでヒットしたレコードにupdate
         
     }
 

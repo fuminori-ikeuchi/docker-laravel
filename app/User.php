@@ -20,7 +20,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable = [                                    // 新規で登録する場合、$fillable（許可）設定
         'name', 'email', 'password', 'role'
     ];
 
@@ -44,8 +44,7 @@ class User extends Authenticatable
 
     public static function hasEmail($email)
     {
-        return self::firstWhere("email", $email);
-        // return "ふみのり";
+        return self::firstWhere("email", $email);                  // このemailがあるかどうか（重複防止）
         // return $data !== null ? true : false;
     }
 
@@ -54,11 +53,11 @@ class User extends Authenticatable
         $create = [
             "name" => $name,
             "email" => $email,
-            "password" => Hash::make($password),   //注意
+            "password" => Hash::make($password),   // 注意
             "role" => $role,
         ];
         
         // Log::debug(print_r($create, true));
-        return self::create($create);
+        self::create($create);                               // 登録後
     }
 }

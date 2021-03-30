@@ -42,7 +42,7 @@ class LoginController extends Controller
     //  */
     public function login(Request $request)
     {
-        $this->setCredentials($request);               
+        $this->setCredentials($request);               // $this->このコントローラの61行目のsetCredentials()実行
 
         if (Auth::attempt($this->credentials)) {       //　Auth::attemptはログインを試みる
                 $request->session()->regenerate();     //  $request->session()->regenerate(); セッション発行

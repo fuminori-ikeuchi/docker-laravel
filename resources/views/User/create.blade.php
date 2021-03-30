@@ -29,7 +29,7 @@
                     <form method="POST" action="/create_user">
                         @csrf
                         <div class="form-group">
-                            <label for="inputEmail">おな</label>
+                            <label for="inputEmail">お名前</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" id="inputname" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
                         </div>
                         <div class="form-group">
@@ -59,11 +59,15 @@
                             </div>
                         <div class="mt-4">
                             <button type="submit" class="btn btn-primary btn-block btn-lg">
-                                アカウントを新規作成する
+                                新規作成する
                             </button>
                         </div>
                     </form>
                 </div>
+                <hr class="mx-5 mb-3">
+                    <div class="text-center mb-3">
+                        <a class="nav-link" href="/login">ログインはこちら</a>
+                    </div>
             </div>
         </div>
     </div>

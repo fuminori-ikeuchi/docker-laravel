@@ -18,17 +18,17 @@
 //ログアウト
 Route::get('/logout', 'AuthController@logout');
 // ログイン画面の表示
-Route::get('/login', 'LoginController@index')->name('login');
+Route::get('/login', 'LoginController@index')->name('login');   // ->name('login')をつけることで未ログイン時の操作はログインに戻るようになる
 Route::post('/login', 'LoginController@login');
 // ユーザー新規登録画面
 Route::get('/create_user', 'UserController@register');
 Route::post('/create_user', 'UserController@create');
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => 'auth'], function() {       // この中のルーティングはログインしないとさわれない（ログインに戻る）
     Route::group(["namespace" => "Home"], function(){
         
         //在庫
-        Route::get('/', 'HomeController@index');
+        Route::get('/', 'HomeController@index');            
         Route::get('/register', 'HomeController@register');
         Route::post('/register', 'HomeController@create');
         Route::get('/check/{id}', 'HomeController@check');
