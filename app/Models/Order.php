@@ -19,6 +19,11 @@ class Order extends Model
         return $this->belongsTo(Stock::class);
     }
 
+    // public function user() // 単数形
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
+
     public static function getOrders()
     {
         return self::all();     // コントローラでgetStocks()を呼び出して、returenで取得した値をコントローラに返している
@@ -48,7 +53,7 @@ class Order extends Model
     
     public static function check($o_id)
     {
-        return self::firstwhere('id', $o_id);
+        return self::firstwhere('id', $o_id);     // 初めにヒットしたidのレコードを返す
     }
 
 }

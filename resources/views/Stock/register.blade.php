@@ -32,8 +32,8 @@
                             </div>
                         </div>
                         <div class="col-md-6 mt-3">
-                            <label for="firstName">金額／1個</label>
-                            <input type="text" class="form-control" name="price" placeholder="金額（数字のみ）" required>
+                            <label for="firstName">金額 (単価)</label>
+                            <input type="text" class="form-control" name="price" placeholder="金額 (数字入力)" required>
                             <div class="invalid-feedback">
                                 入力してください
                             </div>

@@ -11,18 +11,20 @@ use Log;  // デバッグのため
 
 class HomeController extends Controller
 {
+    // public function __construct(){
+    //     $this->middleware('auth');
+    // }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index()      //在庫一覧
     {
         $data = [
             // 'stock'      => "ああああああああ"
             "stock"         => Stock::getStocks()   // Stock::（モデルの）getStocks()（関数）を使用
         ];
-
         return view('stock.index', $data);  // stock/indexに、$dataをもたす
     }
 
@@ -31,7 +33,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function check($s_id)
+    public function check($s_id)     // show
     {
         $data = [
             // 'stock'      => "ああああああああ"
@@ -48,11 +50,11 @@ class HomeController extends Controller
      */
     public function register()  // 在庫登録画面
     {
-        $data = [
-            // 'stock'      => "ああああああああ"
-            "stock"         => Stock::getStocks()
-        ];
-        return view('stock.register', $data);
+        // $data = [
+        //     'stock'      => "ああああああああ"
+            // "stock"         => Stock::getStocks()
+        // ];
+        return view('stock.register');
     }
 
 
@@ -63,8 +65,8 @@ class HomeController extends Controller
      */
     public function create(Request $request)   // create(Request $request)のRequestはリクエストデータ、$requestはRequestを$requestとする
     {
-        $test = $request->all();               // 上記のリクエストの全てを$testに
-        Log::debug(print_r($test, true));      // Log::debug('デバッグメッセージ')に配列として引数$testを渡している
+        // $test = $request->all();               // 上記のリクエストの全てを$testに
+        // Log::debug(print_r($test, true));      // Log::debug('デバッグメッセージ')に配列として引数$testを渡している
         $create = [
             'name'     =>      $request->input('name', null),
             'price'    =>      $request->input('price', null)
@@ -84,7 +86,6 @@ class HomeController extends Controller
             // 'order'      => "ああああああああ"
             "order"         => Order::getOrders()   // Order::（モデルの）getOrders()（関数）を使用
         ];
-
         return view('order.index', $data);  // order/indexに、$dataをもたす
     }
 
@@ -122,12 +123,10 @@ class HomeController extends Controller
 
         $stock_record = Stock::recordCheck($name);
         // Log::debug($stock_record->price);
-
         $update =[
             'stock_id'  => $stock_record->id,
             'o_price'   => $stock_record->price * $request->input('o_num', null)
         ];
-
         Order::updateOrder($record->id, $update);      // updateするときにどこにするか($record->id, $update)の左辺がどこにするか、右辺が何を渡すか
 
         return redirect('/order');   
@@ -161,7 +160,6 @@ class HomeController extends Controller
             'status'     =>      $request->input('status', null),
         ];
         Order::change_status($o_id, $update);
-
 
         $checker = Order::check($o_id);
         // Log::debug(print_r($checker, true));   //個数取れる

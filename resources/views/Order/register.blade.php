@@ -19,13 +19,13 @@
                     <div class="card-body">
 
 
-
+                    @if (Auth::User()->role !== 3 )
                     <form class="form" method="POST" action="/o_register" enctype="multipart/form-data">
                         @csrf
                         
                         <div class="form mb-6">
                             <div class="form-group col-md-4">
-                                <label for="inputState"></label>
+                                <label for="inputState">発注登録</label>
                                 
                                 <select id="inputState" class="form-control" name="name" value="order['name']" required>   
                                 @foreach ($stock as $stocks)
@@ -53,6 +53,8 @@
             </div>
         </div>
  </form>
+ <!-- owari -->
+ @endif
 
 
 
@@ -62,7 +64,7 @@
         </div>
     </div>
     <div>
-　　　　<a href="/">戻る</a>
+　　　　<a href="/order">戻る</a>
 　　 </div>
 </div>
 

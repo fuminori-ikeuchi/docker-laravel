@@ -21,15 +21,12 @@
                     </div>
                 </div>
             </div>
-            <div>
-　　　　        <a href="/">戻る</a>
-            </div>
         </div>
     </div>
 </div>
 <div class = "container">
     <div class = "row">
-        <div class = "col-md-12">
+        <div class = "col-md-10">
             <div class = "py-5">
                 <div class="card">
                     <div class="card-header">
@@ -41,7 +38,7 @@
 
                     <form class="form" method="POST" action="/status" enctype="multipart/form-data">
                         @csrf
-                        @if ($order["status"] === "発注確認")
+                        @if ($order["status"] === "発注確認" && Auth::User()->role === 1)
                         <div class="form mb-6">
                             <div class="form-group col-md-4">
                                 <label for="inputState"></label>
@@ -62,7 +59,7 @@
             </div>
         </div>
                         </div>
-                        @elseif ($order["status"] === "発注状態")
+                        @elseif ($order["status"] === "発注状態" && Auth::User()->role === 3)
                         <div class="form mb-6">
                             <div class="form-group col-md-4">
                                 <label for="inputState"></label>
@@ -84,7 +81,7 @@
         </div>
                         </div>
 
-                        @elseif ($order["status"] === "発注完了")
+                        @elseif ($order["status"] === "発注完了" && Auth::User()->role === 1)
                         <div class="form mb-6">
                             <div class="form-group col-md-4">
                                 <label for="inputState"></label>
@@ -131,10 +128,10 @@
             </div>
         </div>
     </div>
-    <div>
-　　　　<a href="/">戻る</a>
-　　 </div>
+    
 </div>
-
+<div>
+　　　　<a href="/order">戻る</a>
+　　 </div>
 
 @endsection

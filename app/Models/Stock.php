@@ -19,7 +19,12 @@ class Stock extends Model
         return $this->hasMany(Order::class);
     }
 
-    public static function getStocks()
+    // public function user() // 単数形
+    // {
+    //     return $this->belongsTo(User::class);
+    // }
+
+    public static function getStocks()     // 在庫の全ての情報をレコードにして返す
     {
         return self::all();     // コントローラでgetStocks()を呼び出して、returenで取得した値をコントローラに返している
     }
@@ -29,7 +34,7 @@ class Stock extends Model
         self::create($create);  // self::create...自らのテーブルに保存
     }
 
-    public static function getCheck($s_id)
+    public static function getCheck($s_id)  // showページ
     {
         return self::find($s_id);  // self::create...自らのテーブルから受け取ったidを取得しreturnする
     }
