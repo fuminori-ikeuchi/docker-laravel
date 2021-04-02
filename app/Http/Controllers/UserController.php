@@ -71,9 +71,15 @@ class UserController extends Controller
             } else {
                 // $test = $request->all();
                 // Log::debug(print_r($test, true));
-                User::createUser($request->name, $request->email, $request->password, $request->role);
+                // $aaa = $request->password_confirm;
+                // Log::debug($aaa);          // 確認済み
+                if ($request->password_confirm !== $request->password){
+                    return redirect(self::CREATE_USER_URL);
+                } else if ($request->password_confirm === $request->password) {
+                    User::createUser($request->name, $request->email, $request->password, $request->password_confirm, $request->role);
+                    return redirect(self::LOGIN_URL)->with('flash_message', 'ユーザー新規登録が完了しました。');
+                }
                 // Log::debug(print_r($eee, true));     // $eeeはUser::createUser($request->name, $request->email, $request->password, $request->role);
-                return redirect(self::LOGIN_URL)->with('flash_message', 'ユーザー新規登録が完了しました。');
             }
             // $data = $this->user_service->createData($request->email, $request->password, 2);       
         } catch (\Exception $e) {

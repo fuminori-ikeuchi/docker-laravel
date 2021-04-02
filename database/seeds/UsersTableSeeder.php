@@ -19,6 +19,7 @@ class UsersTableSeeder extends Seeder
                 'name'     => 'ふみ',
                 'email'    => 'fuminori.7127.lv19@icloud.com',
                 'password' => Hash::make('test0123'),        // hashはパスワードを暗号化
+                'password_confirm' => Hash::make('test0123'),
                 'role'     => '1'
             ]
         ]);
