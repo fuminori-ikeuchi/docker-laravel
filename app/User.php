@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [                                    // 新規で登録する場合、$fillable（許可）設定
-        'name', 'email', 'password', 'role'
+        'name', 'email', 'password', 'password_confirm', 'role'
     ];
 
     /**
@@ -48,12 +48,13 @@ class User extends Authenticatable
         // return $data !== null ? true : false;
     }
 
-    public static function createUser($name, $email, $password, $role)
+    public static function createUser($name, $email, $password, $password_c, $role)
     {
         $create = [
             "name" => $name,
             "email" => $email,
             "password" => Hash::make($password),   // 注意
+            "password_confirm" => Hash::make($password_c),
             "role" => $role,
         ];
         

@@ -38,7 +38,11 @@
                         </div>
                         <div class="form-group">
                             <label for="inputEmail1">パスワード</label>
-                            <input type="text" class="form-control @error('password') is-invalid @enderror" id="inputPassword" name="password" value="{{ old('password') }}" required autocomplete="current-password">
+                            <input type="password" class="form-control @error('password') is-invalid @enderror" id="inputPassword" name="password" value="{{ old('password') }}" required autocomplete="current-password">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail1">パスワード確認</label>
+                            <input type="password" class="form-control @error('password_confirm') is-invalid @enderror" id="inputPassword_confirm" name="password_confirm" value="{{ old('password_confirm') }}" required autocomplete="current-password">
                         </div>
                         <div class="form-group row">
                             <label for="radio01" class="col-md-4 col-form-label text-md-right">役職</label>
