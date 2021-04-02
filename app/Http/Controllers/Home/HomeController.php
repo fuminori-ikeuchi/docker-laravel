@@ -22,7 +22,6 @@ class HomeController extends Controller
     public function index()      //在庫一覧
     {
         $data = [
-            // 'stock'      => "ああああああああ"
             "stock"         => Stock::getStocks()   // Stock::（モデルの）getStocks()（関数）を使用
         ];
         return view('stock.index', $data);  // stock/indexに、$dataをもたす。すべての在庫情報
@@ -36,10 +35,8 @@ class HomeController extends Controller
     public function check($s_id)     // show
     {
         $data = [
-            // 'stock'      => "ああああああああ"
             "stock"         => Stock::getCheck($s_id)   // Stock::（モデルの）getCheck()（関数）を使用
         ];
-
         return view('stock.check', $data);  // stock/indexに、$dataをもたす
     }
 
@@ -50,10 +47,6 @@ class HomeController extends Controller
      */
     public function register()  // 在庫登録画面
     {
-        // $data = [
-        //     'stock'      => "ああああああああ"
-            // "stock"         => Stock::getStocks()
-        // ];
         return view('stock.register');
     }
 
@@ -83,7 +76,6 @@ class HomeController extends Controller
     public function o_index()
     {
         $data = [
-            // 'order'      => "ああああああああ"
             "order"         => Order::getOrders()   // Order::（モデルの）getOrders()（関数）を使用
         ];
         return view('order.index', $data);  // order/indexに、$dataを持たせてindexで使用
@@ -126,7 +118,6 @@ class HomeController extends Controller
             'o_price'   => $stock_record->price * $request->input('o_num', null)   // 1個あたりの金額＊発注個数で発注金額
         ];
         Order::updateOrder($record->name, $update);      // updateする($record->name, $update)の左辺がどこにするか（->nameは->idでもなんでもok）、右辺が何を渡すか
-
         return redirect('/order');   
     }
 
@@ -138,10 +129,8 @@ class HomeController extends Controller
     public function status($o_id)
     {
         $data = [
-            // 'stock'      => "ああああああああ"
             "order"         => Order::getStatus($o_id)   // nameの情報必要。Order::（モデルの）getStatus()（関数）を使用
         ];
-
         return view('order.status', $data);  // stock/indexに、$dataをもたす
     }
 
