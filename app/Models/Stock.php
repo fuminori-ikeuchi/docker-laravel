@@ -19,6 +19,7 @@ class Stock extends Model
         return $this->hasMany(Order::class);     // 紐付け、１対多
     }
 
+    
     // public function user() // 単数形
     // {
     //     return $this->belongsTo(User::class);
