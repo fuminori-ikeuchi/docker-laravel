@@ -22,8 +22,8 @@
                         @if (Auth::User()->role !== 3 )        
                         <form class="form" method="POST" action="/o_register" enctype="multipart/form-data">
                             @csrf
-                            <div class="form mb-6">
-                                <div class="form-group col-md-4">
+                            <div class="form mb-4">
+                                <div class="form-group col-md-6">
                                     <label for="inputState">発注登録</label>
                                     <select id="inputState" class="form-control" name="name" value="order['name']" required>   
                                         @foreach ($stock as $stocks)

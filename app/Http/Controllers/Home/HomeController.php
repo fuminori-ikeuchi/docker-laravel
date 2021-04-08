@@ -9,6 +9,9 @@ use App\Models\Stock;   // stockモデルを使う
 use App\Models\Order;   // orderモデルを使う
 use Log;  // デバッグのため
 
+use Symfony\Component\HttpFoundation\StreamedResponse;     // csv出力
+use Illuminate\Database\Eloquent\Collection;
+
 class HomeController extends Controller
 {
     // public function __construct(){
@@ -163,6 +166,47 @@ class HomeController extends Controller
         // Log::debug($o_id);
         return redirect('/order');
     }
+
+    public function download( Request $request )
+    {
+
+        $record =  Stock::getStocks();                     // １、表示させたいものを全部モデルからとってくる
+        // $cvsList = [];
+        $cvsList[] = ["id", "在庫", "在庫数", "金額/単価", "登録日"];   // ３、csv出力時のheaderになる部分を先に配列に入れる
+        foreach ($record as $records) {                    // ２、１でとってきた全てをforeachにかける
+            $cvsList[] = [
+                // デバッグ(2-2)
+                $records->id,    
+                $records->name,
+                $records->num,
+                $records->price,
+                $records->created_at,
+            ];
+            // Log::debug(print_r($records->name, true));   // ２−２、foreachの中でデバッグ（値がとれているか）
+        }
+        
+        
+
+        // Log::debug(print_r($cvsList, true));
+        $response = new StreamedResponse (function() use ($request, $cvsList){
+            $stream = fopen('php://output', 'w');
+
+            //　文字化け回避
+            stream_filter_prepend($stream,'convert.iconv.utf-8/cp932//TRANSLIT');
+
+            // CSVデータ
+            foreach($cvsList as $key => $value) {
+                fputcsv($stream, $value);
+            }
+            fclose($stream);
+        });
+        $response->headers->set('Content-Type', 'application/octet-stream');
+        $response->headers->set('Content-Disposition', 'attachment; filename="sample.csv"');
+ 
+        return $response;
+        
+    }
+    
 
     /**
      * Store a newly created resource in storage.
