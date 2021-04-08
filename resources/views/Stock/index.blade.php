@@ -56,6 +56,10 @@
             </div>
         </div>
     </div>
+    <form action="download" method="get">
+        <input type="submit" value="csv">
+    </form>
 </div>
+
 
 @endsection

@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth'], function() {       // この中のルー�
         Route::get('/register', 'HomeController@register');
         Route::post('/register', 'HomeController@create');
         Route::get('/check/{id}', 'HomeController@check');
+        Route::get('/download', 'HomeController@download');
         
         //発注
         Route::get('/order', 'HomeController@o_index');
@@ -41,6 +42,7 @@ Route::group(['middleware' => 'auth'], function() {       // この中のルー�
         Route::post('/status', 'HomeController@change_status');     // {id}なくても大丈夫
     });
 });
+
 
 // Route::get('signup', 'UserController@new');
 // Route::get('login', 'SessionController@new');
