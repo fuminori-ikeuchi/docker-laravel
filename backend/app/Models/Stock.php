@@ -16,32 +16,28 @@ class Stock extends Model
 
     public function orders() // 複数形
     {
-        return $this->hasMany(Order::class);     // 紐付け、１対多
+        return $this->hasMany(Order::class);
     }
 
-    // public function user() // 単数形
-    // {
-    //     return $this->belongsTo(User::class);
-    // }
-
-    public static function getStocks()     // 在庫の全ての情報をレコードにして返す
+    public static function getStocks()
     {
         return self::all();     // コントローラでgetStocks()を呼び出して、returenで取得した値をコントローラに返している
     }
 
     public static function registerStock($create)
     {
-        self::create($create);  // self::create() ... 自らのテーブルに保存、保存だけのためreturnいらず
+        self::create($create);  // self::create...自らのテーブルに保存
     }
 
-    public static function getCheck($s_id)  // showページ
+    public static function getCheck($s_id)
     {
         return self::find($s_id);  // self::create...自らのテーブルから受け取ったidを取得しreturnする
     }
     
     public static function recordCheck($name)
     {
-        return self::firstwhere('name', $name);       // orderでnameをとり、stockモデルでname検索。nameで引っかかったレコードをHomeコントローラに返す
+        // return self::select('name', $record)->get(); // self::create...自らのテーブルから受け取ったidを取得しreturnする
+        return self::firstwhere('name', $name);
     }
 
     
@@ -53,6 +49,6 @@ class Stock extends Model
     
     public static function totalNum($getName, $update)
     {
-        self::where('name', $getName)->update($update);    // 'name'でも'idでも'可でコントローラに合わせる。すでにindexで表示しているためreturnいらない
+        self::where('id', $getName)->update($update);
     }
 }

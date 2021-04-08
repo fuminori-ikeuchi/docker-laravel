@@ -11,21 +11,19 @@ use Log;  // デバッグのため
 
 class HomeController extends Controller
 {
-    // public function __construct(){
-    //     $this->middleware('auth');
-    // }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()      //在庫一覧
+    public function index()
     {
         $data = [
             // 'stock'      => "ああああああああ"
             "stock"         => Stock::getStocks()   // Stock::（モデルの）getStocks()（関数）を使用
         ];
-        return view('stock.index', $data);  // stock/indexに、$dataをもたす。すべての在庫情報
+
+        return view('stock.index', $data);  // stock/indexに、$dataをもたす
     }
 
     /**
@@ -33,7 +31,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function check($s_id)     // show
+    public function check($s_id)
     {
         $data = [
             // 'stock'      => "ああああああああ"
@@ -50,11 +48,11 @@ class HomeController extends Controller
      */
     public function register()  // 在庫登録画面
     {
-        // $data = [
-        //     'stock'      => "ああああああああ"
-            // "stock"         => Stock::getStocks()
-        // ];
-        return view('stock.register');
+        $data = [
+            // 'stock'      => "ああああああああ"
+            "stock"         => Stock::getStocks()
+        ];
+        return view('stock.register', $data);
     }
 
 
@@ -65,8 +63,8 @@ class HomeController extends Controller
      */
     public function create(Request $request)   // create(Request $request)のRequestはリクエストデータ、$requestはRequestを$requestとする
     {
-        // $test = $request->all();               // 上記のリクエストの全てを$testに
-        // Log::debug(print_r($test, true));      // Log::debug('デバッグメッセージ')に配列として引数$testを渡している
+        $test = $request->all();               // 上記のリクエストの全てを$testに
+        Log::debug(print_r($test, true));      // Log::debug('デバッグメッセージ')に配列として引数$testを渡している
         $create = [
             'name'     =>      $request->input('name', null),
             'price'    =>      $request->input('price', null)
@@ -86,7 +84,8 @@ class HomeController extends Controller
             // 'order'      => "ああああああああ"
             "order"         => Order::getOrders()   // Order::（モデルの）getOrders()（関数）を使用
         ];
-        return view('order.index', $data);  // order/indexに、$dataを持たせてindexで使用
+
+        return view('order.index', $data);  // order/indexに、$dataをもたす
     }
 
     /**
@@ -98,7 +97,7 @@ class HomeController extends Controller
     {
         $data = [
             // 'stock'      => "ああああああああ"
-            "stock"         => Stock::getStocks()    // nameの情報を使っているため$dateを使用
+            "stock"         => Stock::getStocks()
         ];
         return view('order.register', $data);
     }
@@ -110,22 +109,26 @@ class HomeController extends Controller
      */
     public function o_create(Request $request)   // create(Request $request)のRequestはリクエストデータ、$requestはRequestを$requestとする
     {
-        // $test = $request->all();               // 上記のリクエストの全て->all()を$testに
+        // $test = $request->all();               // 上記のリクエストの全てを$testに
         // Log::debug(print_r($test, true));      // Log::debug('デバッグメッセージ')に配列として引数$testを渡している
-        $create = [                               // $createに入力されたデータを配列に代入
+        $create = [
             'name'     =>      $request->input('name', null),
             'o_num'      =>      $request->input('o_num', null)
         ];
-        $record = Order::registerOrder($create);   // 登録したものをモデルからコントローラにreturnする（レコードで返される）
-        // Log::debug($record->name);              // 入力された名前をとれるかのdebug
-        $name = $record->name;                     // 入力された名前を変数に代入
-        $stock_record = Stock::recordCheck($name);  // stockモデルでname検索し、ヒットしたレコード取得
-        // Log::debug($stock_record->price);        // stockモデルでname検索したレコードのpriceが取得できるかの確認
-        $update =[                                  // 先ほどnullありでデータベースに登録したレコードにstockモデルからとってきた情報をupdate
+        $record = Order::registerOrder($create);   // 登録されたものをモデルからコントローラにreturnするとレコードで返される
+        // Log::debug($record->name);
+        
+        $name = $record->name;
+
+        $stock_record = Stock::recordCheck($name);
+        // Log::debug($stock_record->price);
+
+        $update =[
             'stock_id'  => $stock_record->id,
-            'o_price'   => $stock_record->price * $request->input('o_num', null)   // 1個あたりの金額＊発注個数で発注金額
+            'o_price'   => $stock_record->price * $request->input('o_num', null)
         ];
-        Order::updateOrder($record->name, $update);      // updateする($record->name, $update)の左辺がどこにするか（->nameは->idでもなんでもok）、右辺が何を渡すか
+
+        Order::updateOrder($record->id, $update);      // updateするときにどこにするか($record->id, $update)の左辺がどこにするか、右辺が何を渡すか
 
         return redirect('/order');   
     }
@@ -139,7 +142,7 @@ class HomeController extends Controller
     {
         $data = [
             // 'stock'      => "ああああああああ"
-            "order"         => Order::getStatus($o_id)   // nameの情報必要。Order::（モデルの）getStatus()（関数）を使用
+            "order"         => Order::getStatus($o_id)   // Order::（モデルの）getCheck()（関数）を使用
         ];
 
         return view('order.status', $data);  // stock/indexに、$dataをもたす
@@ -157,19 +160,20 @@ class HomeController extends Controller
         $update = [
             'status'     =>      $request->input('status', null),
         ];
-        Order::change_status($o_id, $update);   // 第一引数（whereのため、idでもnameでも）がどの、第二引数がなにを
+        Order::change_status($o_id, $update);
 
-        $checker = Order::check($o_id);         // 変更したステータスのレコード
+
+        $checker = Order::check($o_id);
         // Log::debug(print_r($checker, true));   //個数取れる
         
-        if ($checker['status'] == '発注受取済み') {                           // $o_idでとってきたレコードのステータス
-            $getName = Stock::getChecker($checker->name);                   // 上記のレコード名(orderテ)と同じものを "stockテーブル" から取得
-            // Log::debug(print_r($getName, true));  //stockテーブルの情報取得
-            // Log::debug($getName->name);
+        if ($checker['status'] == '発注受取済み') {
+            $getName = Stock::getChecker($checker->name);
+            // Log::debug(print_r($getName, true));      //stockテーブルの情報取得
+            Log::debug($getName->name);
             $update = [
-                'num'     =>      $checker["o_num"] + $getName["num"]       // 発注個数(order)+在庫数(stock)をstockテーブルに保存
+                'num'     =>      $checker["o_num"] + $getName["num"]
             ];
-            Stock::totalNum($getName->name, $update);     // どこ(name),なにを渡す($update)をモデルに
+            Stock::totalNum($getName->id, $update);     // idをモデルに
         }
         // Log::debug($o_id);
         return redirect('/order');
