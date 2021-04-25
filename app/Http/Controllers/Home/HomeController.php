@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Home;   //このファイルはどの階層にあるか
+namespace App\Http\Controllers\Home;    //このファイルはどの階層にあるか
 
-use App\Http\Controllers\Controller;   // Controller経由のため
+use App\Http\Controllers\Controller;    // Controller経由のため
 // use App\Stock; 最初に書かれていた(useは何を使うか)
-use Illuminate\Http\Request;  // リクエストされたものを取得できるように
-use App\Models\Stock;   // stockモデルを使う
-use App\Models\Order;   // orderモデルを使う
-use Log;  // デバッグのため
+use Illuminate\Http\Request;            // リクエストされたものを取得できるように
+use App\Models\Stock;                   // stockモデルを使う
+use App\Models\Order;                   // orderモデルを使う
+use Log;                                // デバッグのため
 
-use App\Services\OrderService; // orderサービス使用(ドメイン駆動)
-use App\Services\StockService;
+use App\Services\OrderService;          // orderサービス使用(ドメイン駆動)
+use App\Services\StockService;          // stockサービス使用(ドメイン駆動)
 
 use Symfony\Component\HttpFoundation\StreamedResponse;     // csv出力のため
 use Illuminate\Database\Eloquent\Collection;
@@ -22,7 +22,7 @@ class HomeController extends Controller
         StockService $stockService
         )     // ZaikoService(クラス)を$ZaikoServiceとする
     {
-        $this->orderService = $orderService;                    // 上記の変数 $ZaikoServiceを $this->ZaikoService に代入
+        $this->orderService = $orderService;                    // 上記の変数 $orderServiceを $this->orderService に代入
         $this->stockService = $stockService;
     }
     /**

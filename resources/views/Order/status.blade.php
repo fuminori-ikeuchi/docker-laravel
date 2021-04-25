@@ -63,7 +63,7 @@
                                 <label for="inputState"></label>
                                 <select id="inputState" class="form-control" name="status" value="{{ $order['status'] }}" required>
                                     <option selected>発注状態</option>
-                                    <option>発注完了</option>
+                                    <option>発注済み</option>
                                 </select>
                                 <div class="invalid-feedback">
                                     入力してください
@@ -78,12 +78,12 @@
                             </div>
                         </div>
                         <!-- 発注完了から受取済みにできるのは管理者のみ -->
-                        @elseif ($order["status"] === "発注完了" && Auth::User()->role === 1)
+                        @elseif ($order["status"] === "発注済み" && Auth::User()->role === 1)
                         <div class="form mb-6">
                             <div class="form-group col-md-11">
                                 <label for="inputState"></label>
                                 <select id="inputState" class="form-control" name="status" value="{{ $order['status'] }}" required>
-                                    <option selected>発注完了</option>
+                                    <option selected>発注済み</option>
                                     <option>発注受取済み</option>
                                 </select>
                                 <div class="invalid-feedback">
