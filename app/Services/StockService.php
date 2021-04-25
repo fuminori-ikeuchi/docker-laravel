@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Collection;               // csv出力のため
 use Log;                                                   // デバッグ
 use Symfony\Component\HttpFoundation\StreamedResponse;     // csv出力のため
 
-
 class StockService
 {
     public function getStocks()                                 // ストック一覧(index)
@@ -53,14 +52,14 @@ class StockService
         }
         // Log::debug(print_r($cvsList, true));
 
-        $response = new StreamedResponse (function() use ($request, $cvsList){
+        $response = new StreamedResponse(function () use ($request, $cvsList) {
             $stream = fopen('php://output', 'w');
 
             //　文字化け回避
-            stream_filter_prepend($stream,'convert.iconv.utf-8/cp932//TRANSLIT');
+            stream_filter_prepend($stream, 'convert.iconv.utf-8/cp932//TRANSLIT');
 
             // CSVデータ
-            foreach($cvsList as $key => $value) {
+            foreach ($cvsList as $key => $value) {
                 fputcsv($stream, $value);
             }
             fclose($stream);
@@ -70,4 +69,3 @@ class StockService
         return $response;
     }
 }
-
