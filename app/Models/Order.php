@@ -45,7 +45,7 @@ class Order extends Model
         return self::find($o_id);                          // self::find()...自らのdbからfindの引数で検索し、取得したレコード（一つ）をreturnする
     }
 
-    public static function change_status($o_id, $update)
+    public static function changeStatus($o_id, $update)
     {
         self::where('id', $o_id)->update($update);         // idでヒットしたレコードにupdate
     }
@@ -54,5 +54,4 @@ class Order extends Model
     {
         return self::firstwhere('id', $o_id);             // 初めにヒットしたidのレコードを返す
     }
-
 }
