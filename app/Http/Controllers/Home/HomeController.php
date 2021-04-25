@@ -20,9 +20,8 @@ class HomeController extends Controller
     public function __construct(
         OrderService $orderService,
         StockService $stockService
-        )     // ZaikoService(クラス)を$ZaikoServiceとする
-    {
-        $this->orderService = $orderService;                    // 上記の変数 $ZaikoServiceを $this->ZaikoService に代入
+    ) {
+        $this->orderService = $orderService;
         $this->stockService = $stockService;
     }
     /**
@@ -80,7 +79,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function o_index()   // 発注一覧
+    public function oIndex()   // 発注一覧
     {
         $data = [
             "order"         => $this->orderService->getOrders()   // Order::（モデルの）getOrders()（関数）を使用
@@ -93,7 +92,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function o_register()  // 発注登録画面
+    public function oRegister()  // 発注登録画面
     {
         $data = [
             "stock"     =>   $this->stockService->getStocks()    // form のnameの情報を使っているため$dateを使用
@@ -106,7 +105,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function o_create(Request $request)    // create(Request $request)のRequestはリクエストデータ、$requestはRequestを$requestとする
+    public function oCreate(Request $request)    // create(Request $request)のRequestはリクエストデータ、$requestはRequestを$requestとする
     {
         // $test = $request->all();               // 上記のリクエストの全て->all()を$testに
         // Log::debug(print_r($test, true));      // Log::debug('デバッグメッセージ')に配列として引数$testを渡している
@@ -144,7 +143,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function change_status(Request $request)   // change_status(Request $request)のRequestはリクエストデータ、$requestはRequestを$requestとする
+    public function oStatus(Request $request)   // change_status(Request $request)のRequestはリクエストデータ、$requestはRequestを$requestとする
     {
         $o_id = $request["id"];                       // 上記のリクエストのidを$o_idに。 ステータス変更先の検索のためにhidden(form)でおくったやつ
         // $test = $request->all();                   // 上記のリクエストの全て->all()を$testに
@@ -152,11 +151,11 @@ class HomeController extends Controller
         $update = [
             'status'     =>      $request->status
         ];
-        $this->orderService->change_status($o_id, $update);       // サービスのchange_status(引数)関数を呼び出す
+        $this->orderService->changeStatus($o_id, $update);       // サービスのchange_status(引数)関数を呼び出す
         return redirect('/order');
     }
 
-    public function download( Request $request )     // csv
+    public function download(Request $request)     // csv
     {
         $csv = $this->stockService->download($request);           // stockサービスのdownload関数,引数($request)を渡して呼び出し変数に代入
         return $csv;
@@ -218,4 +217,3 @@ class HomeController extends Controller
         //
     }
 }
-

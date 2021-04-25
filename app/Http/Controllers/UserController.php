@@ -50,7 +50,7 @@ class UserController extends Controller
     //  * @access public
     //  * @return void
     //  */
-    public function register()    
+    public function register()
     {
         return view('user.create');
     }
@@ -64,16 +64,16 @@ class UserController extends Controller
             if (!$request->has('password')) {                         // $request->has('password')、$requestに'password'があるか
                 throw new \Exception('パスワードを指定してください。');
             }
-        
+
             $isEmail = User::hasEmail($request->email);               // 入力されたemailを引数にuserモデルの関数呼び出し
             if ($isEmail) {
-                throw new \Exception('既に登録されているメールアドレスです。');   
+                throw new \Exception('既に登録されているメールアドレスです。');
             } else {
                 // $test = $request->all();
                 // Log::debug(print_r($test, true));
                 // $aaa = $request->password_confirm;
                 // Log::debug($aaa);          // 確認済み
-                if ($request->password_confirm !== $request->password){
+                if ($request->password_confirm !== $request->password) {
                     return redirect(self::CREATE_USER_URL);
                 } else if ($request->password_confirm === $request->password) {
                     User::createUser($request->name, $request->email, $request->password, $request->password_confirm, $request->role);
@@ -81,7 +81,7 @@ class UserController extends Controller
                 }
                 // Log::debug(print_r($eee, true));     // $eeeはUser::createUser($request->name, $request->email, $request->password, $request->role);
             }
-            // $data = $this->user_service->createData($request->email, $request->password, 2);       
+            // $data = $this->user_service->createData($request->email, $request->password, 2);
         } catch (\Exception $e) {
             $err_msg = $e->getMessage();
             return redirect(self::CREATE_USER_URL)->withInput()->withErrors($err_msg);

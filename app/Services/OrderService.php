@@ -35,9 +35,9 @@ class OrderService
         return Order::getStatus($o_id);                        // nameの情報がviewで必要。 Order::（モデルの）getStatus()（関数）を使用
     }
 
-    public function change_status($o_id, $update)              // Requestはリクエストデータ、$requestはRequestを$requestとする
+    public function changeStatus($o_id, $update)              // Requestはリクエストデータ、$requestはRequestを$requestとする
     {
-        Order::change_status($o_id, $update);                        // 第一引数（whereのためのid）がどの、第二引数がなにを, updateのため$checkerの代わりにならず
+        Order::changeStatus($o_id, $update);                        // 第一引数（whereのためのid）がどの、第二引数がなにを, updateのため$checkerの代わりにならず
         $checker = Order::check($o_id);                              // 変更したステータスのレコード(オーダー),id検索
         // Log::debug($checker->o_num);
         $o_num = $checker->o_num;                                    // if文の中の在庫数更新に使う発注個数を$o_numに代入
