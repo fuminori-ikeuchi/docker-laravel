@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Log;
+use Illuminate\Database\Eloquent\Collection;
 
 class Stock extends Model
 {
@@ -27,7 +28,7 @@ class Stock extends Model
 
     public static function getStocks()                  // 在庫の全ての情報をレコードにして返す
     {
-        return self::all();                             // サービスでgetStocks()を呼び出して、returenで取得した値をサービスに返している
+        return self::paginate(15);                             // サービスでgetStocks()を呼び出して、returenで取得した値をサービスに返している
     }
 
     public static function registerStock($create)

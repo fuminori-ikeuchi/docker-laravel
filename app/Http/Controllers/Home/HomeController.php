@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Collection;
 class HomeController extends Controller
 {
     public function __construct(
-        OrderService $orderService,
+        OrderService $orderService,                              // OrderServiceはサービスのクラス、それを $orderServiceとする
         StockService $stockService
     ) {
         $this->orderService = $orderService;
@@ -47,7 +47,7 @@ class HomeController extends Controller
         $data = [
             "stock"    =>   $this->stockService->getCheck($s_id)   // Stock::（モデルの）getCheck()（関数）を使用 -->> zaikoService(上で定義済み)のgetCheck($s_id)
         ];
-        return view('stock.check', $data);  // stock/indexに、$dataをもたす
+        return view('stock.check', $data);  // stock/checkに、$dataをもたす
     }
 
     /**
