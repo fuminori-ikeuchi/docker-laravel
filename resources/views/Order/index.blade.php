@@ -51,6 +51,7 @@
                                 </tbody>
                                 @endforeach
                             </table>
+                            {{ $order->links() }}
                         </div>
                     </div>
                 </div>

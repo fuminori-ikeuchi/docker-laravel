@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Log;
+use Illuminate\Database\Eloquent\Collection;
 
 class Order extends Model
 {
@@ -27,7 +28,7 @@ class Order extends Model
 
     public static function getOrders()
     {
-        return self::all();     // サービスでgetOrders()を呼び出して、returenで取得した値（レコード）をサービスに返している
+        return self::paginate(15);     // サービスでgetOrders()を呼び出して、returenで取得した値（レコード）をサービスに返している
     }
 
     public static function registerOrder($create)

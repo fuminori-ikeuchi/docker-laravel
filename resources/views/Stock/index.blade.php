@@ -50,6 +50,7 @@
                                 </tbody>
                                 @endforeach
                             </table>
+                            {{ $stock->links() }}
                         </div>
                     </div>
                 </div>
