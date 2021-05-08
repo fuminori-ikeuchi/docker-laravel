@@ -36,7 +36,7 @@ class StockService
 
     public function download($request)                                 // csvについて
     {
-        $record = Stock::getStocks();                               // 1、表示させたいものを全部モデルからとってくる(サービス経由)
+        $record = Stock::getAll();                               // 1、表示させたいものを全部モデルからとってくる(サービス経由)
         // $cvsList = [];
         $cvsList[] = ["id", "在庫", "在庫数", "金額/単価", "登録日"];   // 2、csv出力時のheaderになる部分を先に配列に入れる
         foreach ($record as $records) {                             // 3-1、１でとってきた全てをforeachにかける
