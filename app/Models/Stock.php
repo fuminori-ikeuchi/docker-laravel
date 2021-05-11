@@ -26,7 +26,7 @@ class Stock extends Model
     //     return $this->belongsTo(User::class);
     // }
 
-    public static function getStocks()                  // 在庫の全ての情報をレコードにして返す
+    public static function getStocks()                  // 在庫の全ての情報をレコードにして返す, ページネーション（15）
     {
         return self::paginate(15);                             // サービスでgetStocks()を呼び出して、returenで取得した値をサービスに返している
     }
@@ -55,5 +55,10 @@ class Stock extends Model
     public static function totalNum($id, $update)
     {
         self::where('id', $id)->update($update);    // 'name'でも'id'でも可でサービスで取得できた方に合わせる。すでにindexで表示しているためreturnいらない
+    }
+
+    public static function getAll()                  // 在庫の全ての情報をレコードにして返す, csv
+    {
+        return self::all();                             // サービスでgetAll()を呼び出して、returenで取得した値をサービスに返している
     }
 }

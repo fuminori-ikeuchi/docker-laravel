@@ -50,4 +50,9 @@ class OrderService
             Stock::totalNum($num->id, $update);                // updateする($num->id, $update)の左辺がどこにするかの引数。($checker->nameでも可)右辺が何を渡すか
         }
     }
+
+    public function selectAll()                                // オーダー一覧(index)
+    {
+        return Stock::getAll();                            // OrderモデルのgetOrders()を呼び出し
+    }
 }

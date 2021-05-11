@@ -95,7 +95,7 @@ class HomeController extends Controller
     public function oRegister()  // 発注登録画面
     {
         $data = [
-            "stock"     =>   $this->stockService->getStocks()    // form のnameの情報を使っているため$dateを使用
+            "stock"     =>   $this->orderService->selectAll()    // form のnameの情報を使っているため$dateを使用
         ];
         return view('order.register', $data);
     }
