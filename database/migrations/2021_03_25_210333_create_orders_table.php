@@ -17,7 +17,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedInteger('id')->autoIncrement()->comment('PK');
             $table->unsignedInteger('stock_id')->nullable(true)->comment('stock_id');
             $table->string('name', 100)->nullable(false)->comment('名前');
-            $table->unsignedInteger('o_num')->default(0)->nullable(true)->comment('発注個数');
+            $table->unsignedInteger('o_num')->nullable(false)->comment('発注個数');
             $table->unsignedInteger('o_price')->nullable(true)->comment('発注金額');
             $table->string('status', 100)->default("発注確認")->comment('発注状況');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'))->comment('登録日時');

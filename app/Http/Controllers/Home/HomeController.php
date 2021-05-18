@@ -1,22 +1,31 @@
 <?php
 
-namespace App\Http\Controllers\Home;   //このファイルはどの階層にあるか
+namespace App\Http\Controllers\Home;    //このファイルはどの階層にあるか
 
-use App\Http\Controllers\Controller;   // Controller経由のため
+use App\Http\Controllers\Controller;    // Controller経由のため
 // use App\Stock; 最初に書かれていた(useは何を使うか)
-use Illuminate\Http\Request;  // リクエストされたものを取得できるように
-use App\Models\Stock;   // stockモデルを使う
-use App\Models\Order;   // orderモデルを使う
-use Log;  // デバッグのため
+use Illuminate\Http\Request;            // リクエストされたものを取得できるように
+use App\Models\Stock;                   // stockモデルを使う
+use App\Models\Order;                   // orderモデルを使う
+use Log;                                // デバッグのため
+use App\Services\OrderService;          // orderサービス使用(ドメイン駆動)
+use App\Services\StockService;          // stockサービス使用(ドメイン駆動)
 
-use Symfony\Component\HttpFoundation\StreamedResponse;     // csv出力
+use Symfony\Component\HttpFoundation\StreamedResponse;     // csv出力のため
 use Illuminate\Database\Eloquent\Collection;
+
+use Illuminate\Support\Facades\Validator;                  // バリデーション（バリデータファザード用）
+use App\Http\Requests\StockForm;                           // バリデーション（フォームリクエスト）
 
 class HomeController extends Controller
 {
-    // public function __construct(){
-    //     $this->middleware('auth');
-    // }
+    public function __construct(
+        OrderService $orderService,                              // OrderServiceはサービスのクラス、それを $orderServiceとする
+        StockService $stockService
+    ) {
+        $this->orderService = $orderService;
+        $this->stockService = $stockService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +34,7 @@ class HomeController extends Controller
     public function index()      //在庫一覧
     {
         $data = [
-            "stock"         => Stock::getStocks()   // Stock::（モデルの）getStocks()（関数）を使用
+            "stock"     =>    $this->stockService->getStocks()   // Stock::(モデルの)getStocks()(関数)を使用 -->> zaikoService(上で定義済み)のgetStocks()に変更
         ];
         return view('stock.index', $data);  // stock/indexに、$dataをもたす。すべての在庫情報
     }
@@ -38,9 +47,9 @@ class HomeController extends Controller
     public function check($s_id)     // show
     {
         $data = [
-            "stock"         => Stock::getCheck($s_id)   // Stock::（モデルの）getCheck()（関数）を使用
+            "stock"    =>   $this->stockService->getCheck($s_id)   // Stock::（モデルの）getCheck()（関数）を使用 -->> zaikoService(上で定義済み)のgetCheck($s_id)
         ];
-        return view('stock.check', $data);  // stock/indexに、$dataをもたす
+        return view('stock.check', $data);  // stock/checkに、$dataをもたす
     }
 
     /**
@@ -59,15 +68,16 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)   // create(Request $request)のRequestはリクエストデータ、$requestはRequestを$requestとする
+    public function create(StockForm $request)    // フォームリクエスト、create(StockForm $request)のStockFormはバリデーション、$requestはStockFormを$requestとする
     {
         // $test = $request->all();               // 上記のリクエストの全てを$testに
         // Log::debug(print_r($test, true));      // Log::debug('デバッグメッセージ')に配列として引数$testを渡している
-        $create = [
-            'name'     =>      $request->input('name', null),
+
+        $create = [                                             // サービス導入時、コントローラに配列を書く(何を渡しているか認識させるため)
+            'name'     =>      $request->name,
             'price'    =>      $request->input('price', null)
         ];
-        Stock::registerStock($create);
+        $this->stockService->registerStock($create);
         return redirect('/');
     }
 
@@ -76,10 +86,10 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function o_index()
+    public function oIndex()   // 発注一覧
     {
         $data = [
-            "order"         => Order::getOrders()   // Order::（モデルの）getOrders()（関数）を使用
+            "order"         => $this->orderService->getOrders()   // Order::（モデルの）getOrders()（関数）を使用
         ];
         return view('order.index', $data);  // order/indexに、$dataを持たせてindexで使用
     }
@@ -89,11 +99,10 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function o_register()  // 在庫登録画面
+    public function oRegister()  // 発注登録画面
     {
         $data = [
-            // 'stock'      => "ああああああああ"
-            "stock"         => Stock::getStocks()    // nameの情報を使っているため$dateを使用
+            "stock"     =>   $this->orderService->selectAll()    // form のnameの情報を使っているため$dateを使用
         ];
         return view('order.register', $data);
     }
@@ -103,110 +112,83 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function o_create(Request $request)   // create(Request $request)のRequestはリクエストデータ、$requestはRequestを$requestとする
+    public function oCreate(Request $request)    // バリデートファザード、oCreate(Request $request)のRequestはリクエストデータ、$requestはRequestを$requestとする
     {
         // $test = $request->all();               // 上記のリクエストの全て->all()を$testに
         // Log::debug(print_r($test, true));      // Log::debug('デバッグメッセージ')に配列として引数$testを渡している
-        $create = [                               // $createに入力されたデータを配列に代入
-            'name'     =>      $request->input('name', null),
-            'o_num'      =>      $request->input('o_num', null)
+        $rulus = [
+            'name' => 'required',
+            'o_num' => 'required|numeric|between:50,1000',
         ];
-        $record = Order::registerOrder($create);   // 登録したものをモデルからコントローラにreturnする（レコードで返される）
-        // Log::debug($record->name);              // 入力された名前をとれるかのdebug
-        $name = $record->name;                     // 入力された名前を変数に代入
-        $stock_record = Stock::recordCheck($name);  // stockモデルでname検索し、ヒットしたレコード取得
-        // Log::debug($stock_record->price);        // stockモデルでname検索したレコードのpriceが取得できるかの確認
-        $update =[                                  // 先ほどnullありでデータベースに登録したレコードにstockモデルからとってきた情報をupdate
-            'stock_id'  => $stock_record->id,
-            'o_price'   => $stock_record->price * $request->input('o_num', null)   // 1個あたりの金額＊発注個数で発注金額
+        $message = [
+            'name.required' => '商品名を入力してください',
+            'o_num.required' => '個数を入力してください',
+            'o_num.between' => '個数は50個以上で入力してください'
         ];
-        Order::updateOrder($record->name, $update);      // updateする($record->name, $update)の左辺がどこにするか（->nameは->idでもなんでもok）、右辺が何を渡すか
-        return redirect('/order');   
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function status($o_id)
-    {
-        $data = [
-            "order"         => Order::getStatus($o_id)   // nameの情報必要。Order::（モデルの）getStatus()（関数）を使用
-        ];
-        return view('order.status', $data);  // stock/indexに、$dataをもたす
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function change_status(Request $request)   // change_status(Request $request)のRequestはリクエストデータ、$requestはRequestを$requestとする
-    {
-        $o_id = $request["id"];               // 上記のリクエストのidを$o_idに
-        // Log::debug($test);      // Log::debug('デバッグメッセージ')に配列として引数$testを渡している
-        $update = [
-            'status'     =>      $request->input('status', null),
-        ];
-        Order::change_status($o_id, $update);   // 第一引数（whereのため、idでもnameでも）がどの、第二引数がなにを
-
-        $checker = Order::check($o_id);         // 変更したステータスのレコード
-        // Log::debug(print_r($checker, true));   //個数取れる
-        
-        if ($checker['status'] == '発注受取済み') {                           // $o_idでとってきたレコードのステータス
-            $getName = Stock::getChecker($checker->name);                   // 上記のレコード名(orderテ)と同じものを "stockテーブル" から取得
-            // Log::debug(print_r($getName, true));  //stockテーブルの情報取得
-            // Log::debug($getName->name);
-            $update = [
-                'num'     =>      $checker["o_num"] + $getName["num"]       // 発注個数(order)+在庫数(stock)をstockテーブルに保存
+        $validator = Validator::make($request->all(), $rulus, $message);    // makeメソッドはnewと同じ, ['値の配列'=>'検証ルールの配列']==['postしてきた値'=>'検証ルール']
+        //   Log::debug($message);
+        if ($validator->fails()) {                                          // ->fails(), エラー時の処理
+            return redirect('/o_register')
+            ->withErrors($validator);                                       // withErrorsで$errors(view側)へエラーメッセージを保存
+            // ->withInput();                                               // withInputでold()へ入力された値を保存（送信されたフォームの値をInput::old()へ引き継ぐ）
+        } else {
+            $create = [                                            // $createに入力されたデータを配列に代入
+                'name'       =>      $request->name,
+                'o_num'      =>      $request->input('o_num', null)
             ];
-            Stock::totalNum($getName->name, $update);     // どこ(name),なにを渡す($update)をモデルに
+            $this->orderService->create($create);
         }
-        // Log::debug($o_id);
+        // $create = [                                            // $createに入力されたデータを配列に代入
+        //     'name'       =>      $request->name,
+        //     'o_num'      =>      $request->input('o_num', null)
+        // ];
+        // $this->orderService->create($create);
+        // $record = Order::registerOrder($create);     // 登録したものをモデルからコントローラにreturnする（レコードで返される）
+        // $name = $record->name;                       // 登録された名前を変数に代入
+        // $stock_record = Stock::recordCheck($name);   // stockモデルでname検索し、ヒットしたレコード取得
+        // $update =[                                   // 先ほどnullありでデータベースに登録したレコードにstockモデルからとってきた情報でupdate
+        //     'stock_id'  => $stock_record->id,        // stock の id(PK)を$stock_record->idでとってる
+        //     'o_price'   => $stock_record->price * $request->input('o_num', null)   // 1個あたりの金額(stockより) ＊ 発注個数($requestの'o_num')で発注金額
+        // ];
+        // Order::updateOrder($record->name, $update);      // updateする($record->name, $update)の左辺がどこにするか（->nameは->idでもなんでもok）、右辺が何を渡すか
         return redirect('/order');
     }
 
-    public function download( Request $request )
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function status($o_id)                                         // 発注状態の変更ページ
     {
-
-        $record =  Stock::getStocks();                     // １、表示させたいものを全部モデルからとってくる
-        // $cvsList = [];
-        $cvsList[] = ["id", "在庫", "在庫数", "金額/単価", "登録日"];   // ３、csv出力時のheaderになる部分を先に配列に入れる
-        foreach ($record as $records) {                    // ２、１でとってきた全てをforeachにかける
-            $cvsList[] = [
-                // デバッグ(2-2)
-                $records->id,    
-                $records->name,
-                $records->num,
-                $records->price,
-                $records->created_at,
-            ];
-            // Log::debug(print_r($records->name, true));   // ２−２、foreachの中でデバッグ（値がとれているか）
-        }
-        
-        
-
-        // Log::debug(print_r($cvsList, true));
-        $response = new StreamedResponse (function() use ($request, $cvsList){
-            $stream = fopen('php://output', 'w');
-
-            //　文字化け回避
-            stream_filter_prepend($stream,'convert.iconv.utf-8/cp932//TRANSLIT');
-
-            // CSVデータ
-            foreach($cvsList as $key => $value) {
-                fputcsv($stream, $value);
-            }
-            fclose($stream);
-        });
-        $response->headers->set('Content-Type', 'application/octet-stream');
-        $response->headers->set('Content-Disposition', 'attachment; filename="sample.csv"');
- 
-        return $response;
-        
+        $data = [
+            "order"       =>      $this->orderService->getStatus($o_id)   // 名前を表示させる為、nameの情報必要。サービスのgetStatus()（関数）を使用
+        ];
+        return view('order.status', $data);
     }
-    
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function oStatus(Request $request)   // change_status(Request $request)のRequestはリクエストデータ、$requestはRequestを$requestとする
+    {
+        $o_id = $request["id"];                       // 上記のリクエストのidを$o_idに。 ステータス変更先の検索のためにhidden(form)でおくったやつ
+        // $test = $request->all();                   // 上記のリクエストの全て->all()を$testに
+        // Log::debug(print_r($test, true));          // ステータス、idの取得
+        $update = [
+            'status'     =>      $request->status
+        ];
+        $this->orderService->changeStatus($o_id, $update);       // サービスのchange_status(引数)関数を呼び出す
+        return redirect('/order');
+    }
+
+    public function download(Request $request)     // csv
+    {
+        $csv = $this->stockService->download($request);           // stockサービスのdownload関数,引数($request)を渡して呼び出し変数に代入
+        return $csv;
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -264,4 +246,3 @@ class HomeController extends Controller
         //
     }
 }
-

@@ -12,14 +12,14 @@
 
 <div class = "container">
     <div class = "text-right">
-　　　　　[ user : {{ Auth::User()->name }} ]
+        [ user : {{ Auth::User()->name }} ]
     </div>
     <div class = "row">
-        <div class = "register-link">
-            <a href="/o_register">発注登録</a>
-        </div>
         <div class = "col-md-12">
             <div class = "py-5">
+                <div class = "register-link mb-1 ml-4">
+                    <a href="/o_register">発注登録</a>
+                </div>
                 <div class="card">
                     <div class="card-body">
                         <div class = inner-containar>
@@ -51,6 +51,7 @@
                                 </tbody>
                                 @endforeach
                             </table>
+                            {{ $order->links() }}
                         </div>
                     </div>
                 </div>

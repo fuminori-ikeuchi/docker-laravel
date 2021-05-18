@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;        // ログインはモデルなし、AuthとAuth::attemptで動かしている
 
+use App\Http\Requests\LoginForm;             // ユーザーのものを使う
+
 /**
  * Class LoginController
  * ログイン画面
@@ -40,12 +42,12 @@ class LoginController extends Controller
     //  * @access public
     //  * @return void
     //  */
-    public function login(Request $request)
+    public function login(LoginForm $request)
     {
         $this->setCredentials($request);               // $this->このコントローラの61行目のsetCredentials()実行
 
-        if (Auth::attempt($this->credentials)) {       //　Auth::attemptはログインを試みる
-                $request->session()->regenerate();     //  $request->session()->regenerate(); セッション発行
+        if (Auth::attempt($this->credentials)) {       // Auth::attemptはログインを試みる
+                $request->session()->regenerate();     // $request->session()->regenerate(); セッション発行
                 return redirect(self::HOME_URL);
         }
 
@@ -58,7 +60,7 @@ class LoginController extends Controller
     //  * @param Request $request
     //  * @return void
     //  */
-    private function setCredentials(Request $request): void
+    private function setCredentials(LoginForm $request): void
     {
         $this->credentials = [
             'email'     => $request->input('email', null),
