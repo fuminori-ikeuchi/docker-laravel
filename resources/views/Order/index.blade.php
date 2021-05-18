@@ -12,7 +12,7 @@
 
 <div class = "container">
     <div class = "text-right">
-　　　　　[ user : {{ Auth::User()->name }} ]
+        [ user : {{ Auth::User()->name }} ]
     </div>
     <div class = "row">
         <div class = "col-md-12">

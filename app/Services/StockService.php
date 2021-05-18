@@ -23,14 +23,10 @@ class StockService
         return Stock::getCheck($s_id);                          // StockモデルのgetCheck($s_id)を呼び出し
     }
 
-    public function registerStock($request)                     // 登録作業
+    public function registerStock($create)                     // 登録作業
     {
         // $test = $request->all();
         // Log::debug(print_r($test, true));
-        $create = [
-            'name'     =>      $request->name,
-            'price'    =>      $request->input('price', null)
-        ];
         Stock::registerStock($create);                         // StockモデルのgetCheck($s_id)を呼び出し
     }
 

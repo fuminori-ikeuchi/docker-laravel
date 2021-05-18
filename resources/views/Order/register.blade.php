@@ -17,6 +17,15 @@
                         発注登録
                     </div>
                     <div class="card-body">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <!-- if文は上から一つひとつ確認しながら記述 -->
                         <!-- 発注できるのはヒラと管理者のみ -->
                         @if (Auth::User()->role !== 3 )
@@ -25,22 +34,16 @@
                             <div class="form mb-4">
                                 <div class="form-group col-md-12">
                                     <label for="inputState">商品名</label>
-                                    <select id="inputState" class="form-control" name="name" value="order['name']" required>
+                                    <select id="inputState" class="form-control" name="name" value="order['name']">
                                         @foreach ($stock as $stocks)
                                         <!-- 在庫で登録した名前を使っている -->
                                             <option>{{ $stocks->name }}</option>
                                         @endforeach
                                     </select>
-                                    <div class="invalid-feedback">
-                                        入力してください
-                                    </div>
                                 </div>
                                 <div class="col-md-12 mt-3">
                                     <label for="firstName">個数</label>
-                                    <input type="number" class="form-control" name="o_num" placeholder="個数" value="order['o_num']" required>
-                                </div>
-                                <div class="invalid-feedback">
-                                    入力してください
+                                    <input type="number" class="form-control" name="o_num" placeholder="個数" value="order['o_num']">
                                 </div>
                             </div>
                             <div class="form-group text-center">

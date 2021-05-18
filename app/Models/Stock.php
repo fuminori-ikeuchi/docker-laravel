@@ -14,7 +14,7 @@ class Stock extends Model
      * @var string
      */
     protected $table = 'stocks';                   // stocksテーブルを使う
-    protected $fillable = ['name', 'price'];       // 新規登録でnameとpriceカラムに入れるのを許可
+    protected $fillable = ['name', 'price', 'num'];       // 新規登録でnameとpriceカラムに入れるのを許可
 
     public function orders() // 複数形
     {

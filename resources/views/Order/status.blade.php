@@ -44,9 +44,6 @@
                                     <option selected>発注確認</option>
                                     <option>発注状態</option>
                                 </select>
-                                <div class="invalid-feedback">
-                                    入力してください
-                                </div>
                             </div>
                             <!-- hiddenはnullable(false)だとformでエラーが出てしまう場合に使用する -->
                             <input type="hidden" id="id" name="id" value="{{ $order['id'] }}">
@@ -65,9 +62,6 @@
                                     <option selected>発注状態</option>
                                     <option>発注済み</option>
                                 </select>
-                                <div class="invalid-feedback">
-                                    入力してください
-                                </div>
                             </div>
                             <!-- hiddenはnullable(false)だとformでエラーが出てしまう場合に使用する -->
                             <input type="hidden" id="id" name="id" value="{{ $order['id'] }}">
@@ -86,9 +80,6 @@
                                     <option selected>発注済み</option>
                                     <option>発注受取済み</option>
                                 </select>
-                                <div class="invalid-feedback">
-                                    入力してください
-                                </div>
                             </div>
                             <!-- hiddenはnullable(false)だとformでエラーが出てしまう場合に使用する -->
                             <input type="hidden" id="id" name="id" value="{{ $order['id'] }}">
@@ -105,9 +96,6 @@
                                 <select id="inputState" class="form-control" name="status" value="{{ $order['status'] }}" required>
                                     <option selected>発注受取済み</option>
                                 </select>
-                                <div class="invalid-feedback">
-                                    入力してください
-                                </div>
                             </div>
                             <!-- hiddenはnullable(false)だとformでエラーが出てしまう場合に使用する -->
                             <input type="hidden" id="id" name="id" value="{{ $order['id'] }}">

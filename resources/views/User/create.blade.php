@@ -30,19 +30,19 @@
                         @csrf
                         <div class="form-group">
                             <label for="inputEmail">お名前</label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="inputname" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="inputname" name="name" value="{{ old('name') }}" autocomplete="name" autofocus>
                         </div>
                         <div class="form-group">
                             <label for="inputEmail">メールアドレス</label>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="inputEmail" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="inputEmail" name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
                         </div>
                         <div class="form-group">
                             <label for="inputEmail1">パスワード</label>
-                            <input type="password" class="form-control @error('password') is-invalid @enderror" id="inputPassword" name="password" value="{{ old('password') }}" required autocomplete="current-password">
+                            <input type="password" class="form-control @error('password') is-invalid @enderror" id="inputPassword" name="password" value="{{ old('password') }}" autocomplete="current-password">
                         </div>
                         <div class="form-group">
                             <label for="inputEmail1">パスワード確認</label>
-                            <input type="password" class="form-control @error('password_confirm') is-invalid @enderror" id="inputPassword_confirm" name="password_confirm" value="{{ old('password_confirm') }}" required autocomplete="current-password">
+                            <input type="password" class="form-control @error('password_confirm') is-invalid @enderror" id="inputPassword_confirm" name="password_confirm" value="{{ old('password_confirm') }}" autocomplete="current-password">
                         </div>
                         <div class="form-group row">
                             <label for="radio01" class="col-md-4 col-form-label text-md-right">役職</label>
