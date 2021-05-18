@@ -8,12 +8,14 @@ use Illuminate\Http\Request;            // リクエストされたものを取�
 use App\Models\Stock;                   // stockモデルを使う
 use App\Models\Order;                   // orderモデルを使う
 use Log;                                // デバッグのため
-
 use App\Services\OrderService;          // orderサービス使用(ドメイン駆動)
 use App\Services\StockService;          // stockサービス使用(ドメイン駆動)
 
 use Symfony\Component\HttpFoundation\StreamedResponse;     // csv出力のため
 use Illuminate\Database\Eloquent\Collection;
+
+use Illuminate\Support\Facades\Validator;                  // バリデーション（バリデータファザード用）
+use App\Http\Requests\StockForm;                           // バリデーション（フォームリクエスト）
 
 class HomeController extends Controller
 {
@@ -66,11 +68,16 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)   // create(Request $request)のRequestはリクエストデータ、$requestはRequestを$requestとする
+    public function create(StockForm $request)    // フォームリクエスト、create(StockForm $request)のStockFormはバリデーション、$requestはStockFormを$requestとする
     {
         // $test = $request->all();               // 上記のリクエストの全てを$testに
         // Log::debug(print_r($test, true));      // Log::debug('デバッグメッセージ')に配列として引数$testを渡している
-        $this->stockService->registerStock($request);
+
+        $create = [                                             // サービス導入時、コントローラに配列を書く(何を渡しているか認識させるため)
+            'name'     =>      $request->name,
+            'price'    =>      $request->input('price', null)
+        ];
+        $this->stockService->registerStock($create);
         return redirect('/');
     }
 
@@ -105,15 +112,37 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function oCreate(Request $request)    // create(Request $request)のRequestはリクエストデータ、$requestはRequestを$requestとする
+    public function oCreate(Request $request)    // バリデートファザード、oCreate(Request $request)のRequestはリクエストデータ、$requestはRequestを$requestとする
     {
         // $test = $request->all();               // 上記のリクエストの全て->all()を$testに
         // Log::debug(print_r($test, true));      // Log::debug('デバッグメッセージ')に配列として引数$testを渡している
-        $create = [                                            // $createに入力されたデータを配列に代入
-            'name'       =>      $request->name,
-            'o_num'      =>      $request->input('o_num', null)
+        $rulus = [
+            'name' => 'required',
+            'o_num' => 'required|numeric|between:50,1000',
         ];
-        $this->orderService->create($create);
+        $message = [
+            'name.required' => '商品名を入力してください',
+            'o_num.required' => '個数を入力してください',
+            'o_num.between' => '個数は50個以上で入力してください'
+        ];
+        $validator = Validator::make($request->all(), $rulus, $message);    // makeメソッドはnewと同じ, ['値の配列'=>'検証ルールの配列']==['postしてきた値'=>'検証ルール']
+        //   Log::debug($message);
+        if ($validator->fails()) {                                          // ->fails(), エラー時の処理
+            return redirect('/o_register')
+            ->withErrors($validator);                                       // withErrorsで$errors(view側)へエラーメッセージを保存
+            // ->withInput();                                               // withInputでold()へ入力された値を保存（送信されたフォームの値をInput::old()へ引き継ぐ）
+        } else {
+            $create = [                                            // $createに入力されたデータを配列に代入
+                'name'       =>      $request->name,
+                'o_num'      =>      $request->input('o_num', null)
+            ];
+            $this->orderService->create($create);
+        }
+        // $create = [                                            // $createに入力されたデータを配列に代入
+        //     'name'       =>      $request->name,
+        //     'o_num'      =>      $request->input('o_num', null)
+        // ];
+        // $this->orderService->create($create);
         // $record = Order::registerOrder($create);     // 登録したものをモデルからコントローラにreturnする（レコードで返される）
         // $name = $record->name;                       // 登録された名前を変数に代入
         // $stock_record = Stock::recordCheck($name);   // stockモデルでname検索し、ヒットしたレコード取得

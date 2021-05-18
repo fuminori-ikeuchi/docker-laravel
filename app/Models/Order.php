@@ -38,7 +38,7 @@ class Order extends Model
 
     public static function updateOrder($record, $update)   // 先ほど保存したレコードをname検索し、ヒットしたところにupdateかける
     {
-        self::where('name', $record)->update($update);     // where('id', $record)の'id'はカラム、おぶじぇくと(配列か) 'name'でも'id'でも
+        self::where('id', $record)->update($update);     // where('id', $record)の'id'はカラム、おぶじぇくと(配列か) 'id'
     }
 
     public static function getStatus($o_id)

@@ -19,15 +19,16 @@ class OrderService
         // $test = $request->all();
         // Log::debug(print_r($test, true));
         $record = Order::registerOrder($create);               // 登録したものをモデルからサービスにreturnする（レコードで返される）
-        // Log::debug($record->o_num);                         // 登録された名前をとれるかのdebug
-        $name = $record->name;                                 // 登録された名前を変数に代入
-        $stock_record = Stock::recordCheck($name);             // stockモデルでname検索し、ヒットしたレコード取得
+        // Log::debug($record->o_num);                         // 登録された名前、個数をとれるかのdebug
+        $id = $record->id;                                     // 登録されたidを変数に代入 => nameではなくidが大事
+        $stock_record = Stock::recordCheck($record->name);     // stockモデルでname検索し、ヒットしたレコード取得
         // Log::debug($stock_record->price);                   // stockモデルでname検索したレコードのprice, idが取得できるかの確認
         $update = [                                            // 先ほどnullありでデータベースに登録したレコードにstockモデルからとってきた情報でupdate
             "stock_id"   =>    $stock_record->id,
             "o_price"    =>    $stock_record->price * $record->o_num         // 1個あたりの金額(stockより) ＊ 発注個数(上記、$recordの個数'o_num')で発注金額
         ];
-        Order::updateOrder($name, $update);                    // updateする($name, $update)の左辺がどこにするかの引数。（$nameは、$record->idでもなんでもok）右辺が何を渡すか
+        // Log::debug(print_r($update, true));
+        Order::updateOrder($id, $update);                    // updateする($id, $update)の左辺がどこにするかの引数。（$idを$record->nameにすると同名のものすべて更新される）右辺が何を渡すか
     }
 
     public function getStatus($o_id)

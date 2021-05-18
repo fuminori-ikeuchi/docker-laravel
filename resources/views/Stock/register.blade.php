@@ -17,22 +17,27 @@
                         在庫登録
                     </div>
                     <div class="card-body">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+                        <!-- 在庫登録できるのはヒラと管理者のみ -->
+                        @if (Auth::User()->role !== 3 )
                         <form class="form" method="POST" action="/register" enctype="multipart/form-data">
                             @csrf
                             <div class="form mb-4">
                                 <div class="col-md-12">
                                     <label for="lastName">商品名</label>
-                                    <input type="text" class="form-control" name="name" placeholder="商品名" required>
-                                    <div class="invalid-feedback">
-                                        入力してください
-                                    </div>
+                                    <input type="text" class="form-control" name="name" placeholder="商品名">
                                 </div>
                                 <div class="col-md-12 mt-3">
                                     <label for="firstName">金額 (単価)</label>
-                                    <input type="number" class="form-control" name="price" placeholder="金額 (数字入力)" required>
-                                    <div class="invalid-feedback">
-                                        入力してください
-                                    </div>
+                                    <input type="number" class="form-control" name="price" placeholder="金額 (数字入力)">
                                 </div>
                             </div>
                             <div class="form-group text-center">
@@ -41,6 +46,7 @@
                                 </div>
                             </div>
                         </form>
+                        @endif
                     </div>
                 </div>
             </div>

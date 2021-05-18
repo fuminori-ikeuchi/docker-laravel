@@ -39,11 +39,11 @@
                             @csrf
                             <div class="form-group">
                                 <label for="inputEmail">メールアドレス</label>
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="inputEmail" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="inputEmail" name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
                             </div>
                             <div class="form-group">
                                 <label for="inputEmail1">パスワード</label>
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="inputPassword" name="password" value="{{ old('password') }}" required autocomplete="current-password">
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="inputPassword" name="password" value="{{ old('password') }}" autocomplete="current-password">
                             </div>
                             <input id="is_active" type="hidden" name="is_active" value="{{ Config::get('constants.IS_ACTIVE.ON') }}">
                             <input id="role_id" type="hidden" name="role_id" value="{{ Config::get('constants.ROLES.USER') }}">
